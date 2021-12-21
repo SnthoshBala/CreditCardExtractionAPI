@@ -67,7 +67,7 @@ async def SaveCustomerDatas(pdf:customerCreditCard):
             counter1=0
     if(counter1==0):
         conn.local.customer.find_one_and_update({"customerAccNumber":customerNumber},{"$push":{"customerPaymentDue":payment}},{"upsert":True})
-        credits_re=re.compile(r'^\d{2} [A-Z].*')
+        credits_re=re.compile(r'^\d{1,2} [A-Z].*')
         points=""
         amount=""
         date="" 
