@@ -1,10 +1,9 @@
 import re
 import pdfplumber
-from fastapi import APIRouter
+from fastapi import APIRouter,File,UploadFile
 from models.Customer import customer
-from models.CustomerCreditCard import customerCreditCard
 from config.db import conn
-from schemas.customer import serializeDict,serializeList
+from schemas.customer import serializeList
 
 customerRouter=APIRouter()
 
@@ -18,12 +17,9 @@ async def SaveCustomer(cust:customer):
     return serializeList(conn.local.customer.find())
 
 @customerRouter.post('/pdf')
-async def SaveCustomerDatas(pdf:customerCreditCard):
+async def SaveCustomerDatas(file:UploadFile = File(...)):
 
-
-    pdfpath=open(pdf.customerStatement, 'rb')
-
-    with pdfplumber.open(pdfpath) as pdf:
+    with pdfplumber.open(file.file) as pdf:
         page = pdf.pages[0]
         text = page.extract_text()
     customer_re = re.compile(r'Customer Number')
@@ -90,5 +86,9 @@ async def SaveCustomerDatas(pdf:customerCreditCard):
                             points=data[i]
                             counter+=1
                 conn.local.customer.find_one_and_update({"customerAccNumber":customerNumber},{"$push":{"customerCreditPurchase":{"date":date,"activity":purchase,"rewards_points":points,"amount_spent":amount}}},{"upsert":True})
+        return "Hi "+ customerName+"!! Your Last Payment Due Statement on "+payment+" of Account number "+customerNumber+ " is Added to the Database"
+    else:
+        return "Hi "+ customerName+"!! Your Last Payment Due Statement on "+payment+" of Account number "+customerNumber+ " is Already Added on the Database"
 
-    return serializeList(conn.local.customer.find({"customerAccNumber":customerNumber}))
+            
+    #return serializeList(conn.local.customer.find({"customerAccNumber":customerNumber}))

@@ -1,7 +1,6 @@
 from pydantic import BaseModel
 
 from typing import List
-from models.CustomerCreditCard import customerCreditCard
 
 class creditCardDetails(BaseModel):
     date:str
