@@ -1,0 +1,12 @@
+Open the Project
+
+Go the Terminal and change it to Git Bash=>
+Run the Below Code:
+
+virtualenv venv
+
+source venv/scripts/activate
+
+pip install pymongo fastapi uvicorn pdfplumber
+
+uvicorn index:app --reload
