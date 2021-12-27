@@ -13,3 +13,9 @@ class customer(BaseModel):
     customerAccNumber:str
     customerCreditPurchase:List[creditCardDetails]
     customerPaymentDue:list
+class user(BaseModel):
+    user:str
+    useracc:str
+class pieChart(BaseModel):
+    label:list
+    value:list
